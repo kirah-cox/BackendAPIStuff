@@ -1,7 +1,36 @@
-﻿@page "/"
+﻿@inject CompendiumService Compendium
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3>Name</h3>
+<div>@lynel.Name</div>
+<h3>Id</h3>
+<div>@lynel.Id</div>
+<h3>Description</h3>
+<div>@lynel.Description</div>
+<h3>Drops</h3>
+<div>@if (lynel.Drops is not null)
+    @foreach (var drop in lynel.Drops)
+    {<div>@drop</div>}
+</div>
+<h3>Common Locations</h3>
+<div>@if (lynel.CommonLocations is not null)
+    @foreach (var location in lynel.CommonLocations)
+    {<div>@location</div>}
+</div>
 
-Welcome to your new app.
+@code{
+    protected List<CompendiumEntry> allEntries = new List<CompendiumEntry>();
+    protected CompendiumEntry? lynel = new CompendiumEntry();
+    protected List<CompendiumEntry> monsters = new List<CompendiumEntry>();
+    protected List<CompendiumEntry> totkMaterials = new List<CompendiumEntry>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        allEntries = await Compendium.GetAllAsync();
+        lynel = await Compendium.GetEntryAsync("white-maned lynel");
+        monsters = await Compendium.GetCategoryAsync("monsters");
+        totkMaterials = await Compendium.GetCategoryAsync("materials", "totk");
+    }
+}

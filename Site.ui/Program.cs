@@ -6,6 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddHttpClient<CompendiumService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.hyrule-compendium.com/v3/");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
